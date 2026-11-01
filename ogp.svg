@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#e74c3c"/>
+  <g transform="translate(600 240) scale(3.6) translate(-32 -32)" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M48.5 8.5 L55.5 15.5 L29.5 41.5 L19.6 44.4 L22.5 34.5 Z"/><path d="M44.3 12.7 L51.3 19.7"/><path d="M22.5 34.5 L29.5 41.5"/><path d="M9 21 L15 27 L27 13"/><path d="M10 54 H42"/></g>
+  <text x="600" y="480" font-size="76" font-weight="600" text-anchor="middle" fill="#ffffff" font-family="-apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif" letter-spacing="-2">赤ペンAI検品台</text>
+</svg>

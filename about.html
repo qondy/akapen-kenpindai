@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赤ペンAI検品台 — 機能紹介</title>
+<meta name="description" content="AIが作った文章・メール・資料・コードを、人間が赤ペンで検品して最終責任を持つためのアプリ。">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#e74c3c">
+<meta property="og:title" content="赤ペンAI検品台 — 機能紹介">
+<meta property="og:image" content="https://APP_URL/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c1: #e74c3c;
+    --c2: #c0392b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: #1a1a1a;
+    color: #ececec;
+    line-height: 1.7;
+  }
+  a { color: inherit; text-decoration: none; }
+  .topbar {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 24px 20px 0;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #9a9a9a;
+    transition: color .15s ease;
+  }
+  .back-link:hover { color: #fff; }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--c1);
+    margin: 24px 20px 0;
+    border-radius: 24px;
+    padding: 64px 24px;
+    text-align: center;
+  }
+  .hero::before, .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: #ffffff;
+    opacity: 0.07;
+    filter: blur(10px);
+  }
+  .hero::before { width: 240px; height: 240px; top: -80px; left: -60px; }
+  .hero::after { width: 300px; height: 300px; bottom: -120px; right: -80px; }
+  .badge {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c1);
+    box-shadow: 0 0 0 14px rgba(255,255,255,0.14);
+  }
+  .category-pill {
+    position: relative;
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    position: relative;
+    margin: 0 0 12px;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    color: #fff;
+  }
+  .hero p.tagline {
+    position: relative;
+    margin: 0 auto 32px;
+    max-width: 520px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.88);
+  }
+  .cta {
+    position: relative;
+    display: inline-block;
+    background: #fff;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 36px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    transition: transform .15s ease;
+  }
+  .cta:hover { transform: translateY(-2px); }
+
+  .features {
+    max-width: 880px;
+    margin: 56px auto 0;
+    padding: 0 20px;
+  }
+  .features h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 24px;
+    color: #fff;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .feature-card {
+    background: #271a19;
+    border: 1px solid #3d2826;
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .feature-icon {
+    color: var(--c1);
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .feature-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #fff;
+  }
+  .feature-desc {
+    font-size: 14px;
+    color: #d1b5b1;
+    margin: 0;
+  }
+
+  .steps {
+    max-width: 880px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+  }
+  .steps h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    color: #fff;
+  }
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-top: 1px solid #3d2826;
+  }
+  .step:first-of-type { border-top: 0; }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--c1);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step p { margin: 0; font-size: 14px; color: #e0c9c6; }
+  .step strong { color: #fff; }
+
+  .note {
+    max-width: 880px;
+    margin: 24px auto 0;
+    padding: 0 20px;
+    font-size: 13px;
+    color: #a88b87;
+  }
+
+  .footer-cta {
+    max-width: 880px;
+    margin: 56px auto 0;
+    padding: 0 20px 64px;
+    text-align: center;
+  }
+  .footer-cta .cta {
+    background: var(--c1);
+    color: #fff;
+    box-shadow: none;
+  }
+  .footer-links {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #a88b87;
+  }
+  .footer-links a { color: #9a9a9a; }
+  .footer-links a:hover { color: #fff; }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="back-link" href="https://apps.yuji-nakamura.com/">← アプリ一覧に戻る</a>
+  </div>
+
+  <section class="hero">
+    <span class="category-pill">仕事</span>
+    <div class="badge"><svg width="72" height="72" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M48.5 8.5 L55.5 15.5 L29.5 41.5 L19.6 44.4 L22.5 34.5 Z"/><path d="M44.3 12.7 L51.3 19.7"/><path d="M22.5 34.5 L29.5 41.5"/><path d="M9 21 L15 27 L27 13"/><path d="M10 54 H42"/></svg></div>
+    <h1>赤ペンAI検品台</h1>
+    <p class="tagline">AIはこれからもっと活躍します。でも、AIが作ったものを世に出すとき、最後に確認して責任を持つのは人間です。その「最後のチェック」を、赤ペンハイライト・チェックリスト・クロスチェック・責任サインで支えるアプリです。</p>
+    <a class="cta" href="https://APP_URL">アプリを使ってみる →</a>
+  </section>
+
+  <section class="features">
+    <h2>できること</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M46 10 H18 Q12 10 12 16 V48 Q12 54 18 54 H46 Q52 54 52 48 V16 Q52 10 46 10 Z"/><path d="M22 22 H42"/><path d="M22 32 H42"/><path d="M22 42 H34"/></svg></div>
+        <h3 class="feature-title">AIの出力を検品台に載せる</h3>
+        <p class="feature-desc">文章・メール・資料・コード・数値分析を貼り付けて、使い道（個人用・社内・社外公開）と作ったAIを選ぶだけ。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 46 H54"/><path d="M14 30 H26"/><path d="M32 30 H50"/><path d="M14 20 H40"/><path d="M14 40 H22" /></svg></div>
+        <h3 class="feature-title">赤ペンハイライト</h3>
+        <p class="feature-desc">数字・日付・固有名詞・URL・個人情報、「必ず」「100%」などの言い切りや「一般的に」などのあいまいな根拠に自動で印。確かめたらタップで確認済みに。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="10" width="40" height="46" rx="6"/><path d="M20 24 L24 28 L32 20"/><path d="M36 24 H44"/><path d="M20 40 L24 44 L32 36"/><path d="M36 40 H44"/></svg></div>
+        <h3 class="feature-title">種類×重要度のチェックリスト</h3>
+        <p class="feature-desc">事実・数字・出典・固有名詞・機密・権利・表現・抜け漏れ・動作の観点から、成果物に合った項目を自動で用意。重要なものほど項目が増えます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="14" width="30" height="22" rx="6"/><rect x="26" y="28" width="30" height="22" rx="6"/><path d="M18 36 L14 44 V36"/></svg></div>
+        <h3 class="feature-title">別のAIにクロスチェック</h3>
+        <p class="feature-desc">「ファクトチェック」「反対の立場から指摘」「読み手目線で誤解チェック」の依頼文をワンタップでコピー。作ったAIとは別のAIで見落としを減らします。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="30" r="18"/><path d="M24 30 L30 36 L41 25"/><path d="M22 46 L18 58 L32 52 L46 58 L42 46"/></svg></div>
+        <h3 class="feature-title">判定と責任サイン</h3>
+        <p class="feature-desc">「OK・要修正・差し戻し」で判定し、確認した人と日時を記録。問題が残ったままOKにはできません。誰がいつ確認したかが確認ログに残ります。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 50 H52"/><path d="M18 50 V36"/><path d="M28 50 V24"/><path d="M38 50 V30"/><path d="M48 50 V16"/></svg></div>
+        <h3 class="feature-title">AIのクセ帳</h3>
+        <p class="feature-desc">見つけたミスを分類ごとに集計。「数字のまちがいが多い」などAIのクセや、AIごと・種類ごとのミスの傾向が見えます。いつも確認したいことはマイチェック項目に。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps">
+    <h2>使い方</h2>
+    <div class="step">
+      <span class="step-num">1</span>
+      <p><strong>Googleでログイン</strong>：記録はあなた専用の領域に保存され、スマホとPCで同じデータを見られます。</p>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <p><strong>検品台に載せる</strong>：右下の「＋」から、AIが作ったものを貼り付けて、種類と使い道を選びます。</p>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <p><strong>赤ペンで読む・チェックする</strong>：印の付いた箇所を確かめ、チェックリストに「OK・問題あり・直した・該当なし」で答えます。不安なら別のAIにもクロスチェックを。</p>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <p><strong>判定してサインする</strong>：「OK・要修正・差し戻し」を選んでサインすると、確認ログに残り、見つけたミスはAIのクセ帳に集計されます。</p>
+    </div>
+  </section>
+
+  <p class="note">※ 赤ペンハイライトやチェックリストは確認の手助けです。印が付かない箇所にも誤りはありえるので、最後は必ずご自身の目で確かめてください。このアプリがAIに文章を送ることはありません。</p>
+
+  <section class="footer-cta">
+    <a class="cta" href="https://APP_URL">今すぐ使ってみる →</a>
+    <p class="footer-links"><a href="https://apps.yuji-nakamura.com/">他のアプリも見る</a></p>
+  </section>
+</body>
+</html>

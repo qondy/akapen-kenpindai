@@ -1,0 +1,61 @@
+// Colors — 赤（Flat UI「Alizarin」。OGPサムネイルと統一）
+$color-bg: #fbf6f5;
+$color-surface: #ffffff;
+$color-surface-2: #f6ebe9;
+$color-surface-3: #ecd8d5;
+$color-primary: #e74c3c;
+$color-primary-hover: #c0392b;
+$color-primary-ink: #b03a2e; // 白地の上で文字として使う濃い赤（コントラスト確保）
+$color-primary-soft: #fdecea;
+$color-danger: #dc2626;
+$color-text: #1d1d1f;
+$color-text-muted: #66605e;
+$color-border: #efe2df;
+
+// 判定・チェック結果の色（primaryには追従させない）
+$color-ok: #1e8449;
+$color-ok-soft: #e6f4ea;
+$color-fix: #b9770e;
+$color-fix-soft: #fdf2dc;
+$color-reject: #566573;
+$color-reject-soft: #eaedf0;
+$color-ng: #c0392b;
+$color-ng-soft: #fbe5e2;
+
+// 赤ペンの印の色（種類ごと）
+$mark-colors: (
+  privacy: #8e44ad,
+  danger: #c0392b,
+  url: #2471a3,
+  date: #138d75,
+  number: #d35400,
+  name: #1e8449,
+  assert: #e74c3c,
+  vague: #9a7d0a,
+);
+
+// Typography
+$font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+$font-size-xs: 12px;
+$font-size-sm: 13px;
+$font-size-base: 15px;
+$font-size-lg: 18px;
+$font-size-xl: 22px;
+$font-size-2xl: 28px;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+
+// Border radius
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+
+// Breakpoints
+$bp-mobile: 480px;
+$bp-tablet: 768px;

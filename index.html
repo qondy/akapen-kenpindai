@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e74c3c">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>赤ペンAI検品台</title>
+  <meta name="description" content="AIが作った文章・メール・資料・コードを、人間が赤ペンで検品して最終責任を持つためのアプリ。確認が必要な箇所の自動ハイライト、種類と重要度に合わせたチェックリスト、別AIへのクロスチェック依頼文、判定と責任サインの確認ログ、AIのクセ帳。">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <meta property="og:title" content="赤ペンAI検品台">
+  <meta property="og:description" content="AIが作ったものに、最後に責任を持つのは人間。赤ペンで検品して、サインしてから世に出そう。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://APP_URL/ogp.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://APP_URL/ogp.png">
+</head>
+<body>
+
+  <!-- ログイン画面 -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <span class="login-card__logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M48.5 8.5 L55.5 15.5 L29.5 41.5 L19.6 44.4 L22.5 34.5 Z"/><path d="M44.3 12.7 L51.3 19.7"/><path d="M22.5 34.5 L29.5 41.5"/><path d="M9 21 L15 27 L27 13"/><path d="M10 54 H42"/></svg></span>
+      <h1 class="login-card__title">赤ペンAI検品台</h1>
+      <p class="login-card__tagline">AIが作ったものに、最後に責任を持つのは人間。<br>赤ペンで検品して、サインしてから世に出そう。</p>
+      <button id="btn-google-login" class="google-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Googleでログイン
+      </button>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <header class="app-header">
+      <span class="app-header__brand"><svg width="28" height="28" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-7px"><path d="M48.5 8.5 L55.5 15.5 L29.5 41.5 L19.6 44.4 L22.5 34.5 Z"/><path d="M44.3 12.7 L51.3 19.7"/><path d="M22.5 34.5 L29.5 41.5"/><path d="M9 21 L15 27 L27 13"/><path d="M10 54 H42"/></svg> 赤ペンAI検品台</span>
+      <nav class="app-header__nav">
+        <a href="about.html" class="app-header__about-link">アプリについて</a>
+        <div id="user-info" class="app-header__user hidden">
+          <img id="user-avatar" class="app-header__avatar" src="" alt="" />
+          <span id="user-name" class="app-header__name"></span>
+          <button id="btn-logout" class="btn btn--ghost btn--sm">ログアウト</button>
+        </div>
+      </nav>
+    </header>
+
+    <div class="tabs-bar" id="tabs-bar">
+      <div class="tabs" role="tablist">
+        <button type="button" class="tabs__btn is-active" role="tab" data-tab="queue" aria-selected="true">検品中<span class="tabs__count" id="count-queue"></span></button>
+        <button type="button" class="tabs__btn" role="tab" data-tab="log" aria-selected="false">確認ログ<span class="tabs__count" id="count-log"></span></button>
+        <button type="button" class="tabs__btn" role="tab" data-tab="habit" aria-selected="false">AIのクセ帳</button>
+      </div>
+    </div>
+
+    <main class="app-main">
+
+      <!-- 検品中 -->
+      <section class="panel" data-panel="queue">
+        <div class="today-head">
+          <p class="today-head__date" id="today-date"></p>
+          <h2 class="today-head__title">AIの仕事に、人間の赤ペンを。</h2>
+        </div>
+        <div class="flow-row">
+          <div class="flow-row__item"><span class="flow-row__value" id="flow-pending">0</span><span class="flow-row__label">検品中</span></div>
+          <div class="flow-row__item"><span class="flow-row__value" id="flow-findings">0</span><span class="flow-row__label">見つけたミス</span></div>
+          <div class="flow-row__item is-done"><span class="flow-row__value" id="flow-signed">0</span><span class="flow-row__label">サイン済み</span></div>
+        </div>
+
+        <button type="button" id="btn-add-inline" class="add-inline">＋ AIの成果物を検品台に載せる</button>
+
+        <div class="section">
+          <div class="section__head">
+            <h3 class="section__title">検品中</h3>
+            <p class="section__desc">まだサインしていないものです。開いて、赤ペン→チェックリスト→判定とサインの順に進めましょう。</p>
+          </div>
+          <div id="queue-list" class="card-list"></div>
+        </div>
+      </section>
+
+      <!-- 確認ログ -->
+      <section class="panel hidden" data-panel="log">
+        <div class="section__head">
+          <h2 class="section__title">確認ログ</h2>
+          <p class="section__desc">誰が・いつ・どう判断したかの記録です。あとから「ちゃんと確認したか」を振り返れます。</p>
+        </div>
+        <div class="search-field">
+          <input type="search" id="input-search" placeholder="タイトル・本文・メモで探す" maxlength="40" aria-label="キーワードで探す" />
+        </div>
+        <div class="filter-chips" id="log-chips" role="radiogroup"></div>
+        <div id="log-list" class="card-list"></div>
+      </section>
+
+      <!-- AIのクセ帳 -->
+      <section class="panel hidden" data-panel="habit">
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-card__value" id="stat-signed">0</div><div class="stat-card__label">サインした件数</div></div>
+          <div class="stat-card"><div class="stat-card__value" id="stat-findings">0</div><div class="stat-card__label">見つけたミス</div></div>
+          <div class="stat-card"><div class="stat-card__value" id="stat-catch">-</div><div class="stat-card__label">ミスがあった割合</div></div>
+        </div>
+        <p class="advice" id="habit-advice"></p>
+
+        <div class="section">
+          <div class="section__head">
+            <h3 class="section__title">よく見つかるミス</h3>
+            <p class="section__desc">チェックで「問題あり」「直した」を付けた項目の分類です。</p>
+          </div>
+          <div id="category-bars" class="bars"></div>
+        </div>
+
+        <div class="section">
+          <div class="section__head">
+            <h3 class="section__title">AIごとの1件あたりのミス</h3>
+          </div>
+          <div id="tool-rows" class="rows"></div>
+        </div>
+
+        <div class="section">
+          <div class="section__head">
+            <h3 class="section__title">種類ごとの1件あたりのミス</h3>
+          </div>
+          <div id="kind-rows" class="rows"></div>
+        </div>
+
+        <div class="section">
+          <div class="section__head">
+            <h3 class="section__title">マイチェック項目</h3>
+            <p class="section__desc">自分の仕事でいつも確認したいことを足せます。すべての検品のチェックリストの最後に入ります。</p>
+          </div>
+          <form id="custom-form" class="custom-form">
+            <input type="text" id="input-custom" maxlength="60" placeholder="例：社内の用語集どおりの表記になっているか" aria-label="チェック項目" />
+            <select id="select-custom-category" aria-label="分類"></select>
+            <button type="submit" id="btn-custom-add" class="btn btn--primary">追加</button>
+          </form>
+          <div id="custom-list" class="custom-list"></div>
+        </div>
+      </section>
+
+      <!-- 検品台（1件の詳細） -->
+      <section class="panel desk hidden" data-panel="desk" id="desk">
+        <button type="button" id="btn-desk-back" class="back-btn">← 一覧へ戻る</button>
+        <div class="desk-head">
+          <div class="item-card__head" id="desk-badges"></div>
+          <h2 class="desk-head__title" id="desk-title"></h2>
+          <div class="desk-head__actions">
+            <button type="button" id="btn-desk-edit" class="text-btn">編集</button>
+            <button type="button" id="btn-desk-delete" class="text-btn">削除</button>
+          </div>
+        </div>
+        <div class="progress">
+          <div class="progress__row"><span>チェックリスト</span><strong id="progress-checks"></strong></div>
+          <div class="progress__track"><div class="progress__fill" id="progress-checks-fill"></div></div>
+          <div class="progress__row"><span>赤ペンの確認</span><strong id="progress-marks"></strong></div>
+          <div class="progress__track"><div class="progress__fill progress__fill--marks" id="progress-marks-fill"></div></div>
+        </div>
+
+        <div class="step">
+          <div class="step__head"><span class="step__num">1</span><h3 class="step__title">赤ペンで読む</h3></div>
+          <p class="step__desc">確認が必要そうな箇所に自動で印を付けました。確かめたら印をタップして「確認済み」にしましょう。印がない箇所も、最後は自分の目で読むのが基本です。</p>
+          <div class="legend" id="mark-legend"></div>
+          <div class="paper" id="desk-body"></div>
+        </div>
+
+        <div class="step">
+          <div class="step__head"><span class="step__num">2</span><h3 class="step__title">チェックリスト</h3></div>
+          <p class="step__desc" id="checklist-desc"></p>
+          <div id="checklist" class="checklist"></div>
+        </div>
+
+        <div class="step">
+          <div class="step__head"><span class="step__num">3</span><h3 class="step__title">別のAIにクロスチェック</h3></div>
+          <p class="step__desc">作ったAIとは別のAIに見てもらうと、見落としに気づきやすくなります。依頼文をコピーして貼り付けましょう。<strong>指摘をうのみにせず、最後は自分で確かめてください。</strong></p>
+          <div id="cross-list" class="cross-list"></div>
+          <div class="ai-links" id="cross-ai-links"></div>
+        </div>
+
+        <div class="step">
+          <div class="step__head"><span class="step__num">4</span><h3 class="step__title">判定と責任サイン</h3></div>
+          <div id="sign-form-wrap">
+            <div class="field">
+              <label class="field__label" for="input-memo">修正メモ・判断の理由<span class="field__hint">任意</span></label>
+              <textarea id="input-memo" maxlength="1000" placeholder="例：売上の数字を元データに合わせて修正。B社の社名表記を直した"></textarea>
+            </div>
+            <div class="field">
+              <span class="field__label">判定</span>
+              <div id="verdict-options" class="segmented" role="radiogroup"></div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="input-signer">確認した人</label>
+              <input type="text" id="input-signer" maxlength="30" placeholder="名前" />
+            </div>
+            <p class="sign-warning hidden" id="sign-warning"></p>
+            <button type="button" id="btn-sign" class="btn btn--primary btn--lg btn--block">確認しました。サインする</button>
+          </div>
+          <div id="certificate" class="certificate hidden"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 Yuji Nakamura. All rights reserved.</p>
+      <p><a href="https://apps.yuji-nakamura.com/" target="_blank" rel="noopener">他のアプリを見る →</a></p>
+    </footer>
+
+    <a href="about.html" class="about-btn"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="32" r="20"/><circle cx="32" cy="22" r="1.5" fill="currentColor" stroke="none"/><line x1="32" y1="30" x2="32" y2="44"/></svg> アプリについて</a>
+    <button type="button" id="btn-fab" class="fab" aria-label="AIの成果物を検品台に載せる"><svg width="24" height="24" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M32 12 V52"/><path d="M12 32 H52"/></svg></button>
+    <button id="feedback-btn" class="feedback-btn" aria-label="ご意見・ご要望"><svg width="22" height="22" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-6px"><rect x="8" y="14" width="48" height="30" rx="8"/><path d="M22 44 L14 54 V44"/></svg> ご意見</button>
+  </div>
+
+  <!-- 検品台に載せる・編集 -->
+  <div id="item-modal-overlay" class="dialog-overlay">
+    <form id="item-form" class="modal">
+      <div class="modal__head">
+        <div class="modal__title" id="item-modal-title">検品台に載せる</div>
+        <button type="button" id="btn-item-close" class="modal__close" aria-label="閉じる">&times;</button>
+      </div>
+      <div class="field">
+        <label class="field__label" for="input-title">タイトル<span class="field__hint">何の成果物か</span></label>
+        <input type="text" id="input-title" maxlength="60" placeholder="例：A社への見積もり送付メール" required />
+      </div>
+      <div class="field">
+        <span class="field__label">種類</span>
+        <div id="kind-chips" class="filter-chips filter-chips--tight" role="radiogroup"></div>
+      </div>
+      <div class="field">
+        <span class="field__label">使い道（重要度）<span class="field__hint">重要なほどチェック項目が増えます</span></span>
+        <div id="level-options" class="segmented" role="radiogroup"></div>
+      </div>
+      <div class="field">
+        <span class="field__label">作ったAI</span>
+        <div id="tool-chips" class="filter-chips filter-chips--tight" role="radiogroup"></div>
+      </div>
+      <div class="field">
+        <label class="field__label" for="input-body">AIの出力<span class="field__hint">そのまま貼り付け</span></label>
+        <textarea id="input-body" class="textarea-body" maxlength="20000" placeholder="AIが作った文章・メール・コードなどを貼り付けてください" required></textarea>
+        <p class="field__note">個人情報や社外秘を含む場合は、伏せ字にしてから貼り付けると安心です。</p>
+      </div>
+      <div class="modal__actions">
+        <button type="button" id="btn-item-cancel" class="btn btn--ghost">キャンセル</button>
+        <button type="submit" id="btn-item-submit" class="btn btn--primary">検品台に載せる</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 確認ダイアログ（カスタムUI） -->
+  <div id="confirm-dialog-overlay" class="dialog-overlay">
+    <div class="dialog">
+      <div class="dialog__title" id="confirm-dialog-title">削除しますか？</div>
+      <div class="dialog__text" id="confirm-dialog-text">削除すると元に戻せません。</div>
+      <div class="dialog__actions">
+        <button id="btn-confirm-cancel" class="btn btn--ghost">キャンセル</button>
+        <button id="btn-confirm-ok" class="btn btn--danger">削除する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 要望送信モーダル -->
+  <div id="feedback-modal-overlay" class="dialog-overlay">
+    <div class="modal">
+      <div class="modal__head">
+        <div class="modal__title">ご意見・ご要望</div>
+        <button id="btn-feedback-close" class="modal__close" aria-label="閉じる">&times;</button>
+      </div>
+      <textarea id="input-feedback-message" rows="5" maxlength="2000" placeholder="ご意見・ご要望・バグ報告など、なんでもどうぞ"></textarea>
+      <div class="modal__actions">
+        <button id="btn-feedback-send" class="btn btn--primary">送信する</button>
+      </div>
+      <p class="modal__note">送信内容は開発者に届きます。個人情報は入力しないでください。</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
