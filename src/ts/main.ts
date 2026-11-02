@@ -14,6 +14,9 @@ import {
 } from './store';
 import { summary, byCategory, byTool, byKind, adviceFor, findingCount, signed, Bar, ToolRow } from './stats';
 import { Inspection, Kind, Level, CheckResult, Verdict, CustomItem } from './types';
+import { initClickTracking } from './analytics';
+
+initClickTracking();
 
 // ============================================================
 // DOM refs
